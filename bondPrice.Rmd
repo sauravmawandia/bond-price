@@ -1,0 +1,66 @@
+---
+title: "Predicting bond price"
+author: "Saurav, Sougandh"
+date: '2022-07-10'
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(randomForest)
+library(plyr)
+
+```
+
+```{r}
+
+train <-read.csv( "~/Documents/hmu/525/project/data/train_data.csv",  header = TRUE, na.strings = "NA")
+test <-read.csv( "~/Documents/hmu/525/project/data/test_data.csv",  header = TRUE, na.strings = "NA")
+
+summary(train)
+colnames(train)
+head(train, n = 10)
+tail(train, n = 5)
+
+summary(test)
+head(test, n = 10)
+tail(test, n = 5)
+
+```
+
+```{r data_cleaning}
+appendNAs <- function(dataset) {
+  append_these = data.frame( is.na(dataset[, grep("received_time_diff_last", names(dataset))] ) )
+  names(append_these) = paste(names(append_these), "NA", sep = "_")
+  dataset = cbind(dataset, append_these)
+  dataset[is.na(dataset)] = -1000
+  return(dataset)
+}
+
+# clean the data by removing NA with something else
+train <- appendNAs(train)
+test <- appendNAs(test)
+
+summary(train)
+summary(test)
+
+```
+
+`
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+
+rf <- randomForest(train[,-c(1,2,3)],train$trade_price, do.trace=TRUE,importance=TRUE, sampsize = 10000, ntree = 200)
+
+print("Making Predictions on the Test Set")
+predictions = predict(rf, test)
+
+print("Creating the Submission File")
+predictions_df  <- data.frame(test$id, predictions)
+names(predictions_df)  <- c("id", "trade_price")
+write.csv(predictions_df, file = "random_forest_sample_submission.csv", row.names = FALSE)```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
