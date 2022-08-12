@@ -80,25 +80,18 @@ Benchmark solutions are the first provider of real-time corporate bond prices di
 This research paper's methodology focuses on quantitative aspects of bond price prediction. These variables are not the extent of dependency but have provided a credible amount of accuracy in the  past to other researchers. Simple linear regression and Long Short Term model (LSTM) are used to estimate the prices using the significantly important variables. LSTM proved to be more effective for sequential data. 
 
 ## Data
-The dataset is downloaded from Kaggle. US corporate bond trade data is provided.  Each row includes trade details, some basic information about the traded bond, and information about the previous ten trades. The data is discussed below. There are 3736 unique bonds present in the data. While we can use this as one Id in the real world, there is no bond_id in the test.csv file, so we can either prepare data using it or drop it. But, dropping bond_id is losing meaningful info, so we will create one function we can use for each bond Id to construct time-series data for it, and then we will train some models on it.\par
-
-id: The row id. bond_id: The unique id of a bond to aid in time series reconstruction. (This column is only present in the train data). 3736 unique bond ids, varying from 12,129 data points to 1 per id.
-trade_price: The price at which the trade occurred. (This is the column to predict in the test data). Mean: 103.44, Median: 102.33, STD: 9.82.
-weight: The weight of the row for evaluation purposes. This is calculated as the square root of the time since the last trade and then scaled so the mean is 1.
-current_coupon: The coupon of the bond at the time of the trade.
-time_to_maturity: The number of years until the bond matures at the time of the trade.
-curve_based_price: A fair price estimate based on implied hazard and funding curves of the issuer of the bond.
-reporting_delay: The number of seconds after the trade occured that it was reported.
-trade_size: The notional amount of the trade.
-
+The dataset is downloaded from Kaggle. US corporate bond trade data is provided.  Each row includes trade details, some basic information about the traded bond, and information about the previous ten trades. The data is discussed below. There are 3736 unique bonds present in the data. While we can use this as one Id in the real world, there is no bond_id in the test.csv file, so we can either prepare data using it or drop it. But, dropping bond_id is losing meaningful info, so we will create one function we can use for each bond Id to construct time-series data for it, and then we will train some models on it.
 ![Time to maturity to bond count](timeTomaturity.png)
 The above plot shows how the maturity time is distributed for a given bond. Sometimes it is helpful to decide which type of bonds have a high maturity time and which have less; The bond price can change a lot based on that.
 
-
-![Trader](trade.png)
-
-The above plot shows the count of different traders that have done trade: 2=customer sell, 3=customer buy, 4=trade between dealers. We would expect customers to get worse prices on average than dealers.
-
+* id: The row id. bond_id: The unique id of a bond to aid in time series reconstruction. (This column is only present in the train data). 3736 unique bond ids, varying from 12,129 data points to 1 per id.
+* trade_price: The price at which the trade occurred. (This is the column to predict in the test data). Mean: 103.44, Median: 102.33, STD: 9.82.
+* weight: The weight of the row for evaluation purposes. This is calculated as the square root of the time since the last trade and then scaled so the mean is 1.
+* current_coupon: The coupon of the bond at the time of the trade.
+* time_to_maturity: The number of years until the bond matures at the time of the trade.
+* curve_based_price: A fair price estimate based on implied hazard and funding curves of the issuer of the bond.
+* reporting_delay: The number of seconds after the trade occurred that it was reported.
+* trade_size: The notional amount of the trade.
 
 ## Procedure
 We can not use the id column at all. So we drop it first. Then we create one function to take our data frame and construct time series data from it. It means that the next trade price will be the output for the current trade. This way, we provide the existing data to predict the next trade price. We have more than 3000 unique bonds. So for all of those bonds, we have to construct the time series data. So, we group by object and then apply our function to create the time-series data. Then we combine all the data into one data frame for further usage. The above data frame has our last column as output. We do not need the bond_id column as it has no valuable information for us. Also, this column is not present in the test.csv file for the competition. So, we try to look closely at the competition data. Then, we scale the data from 0 to 1. This way, our model can fit the data best as normalized. Finally, it is time to split the data into train and test data. We will use 90% of the data to train the model and the rest 10% for testing our model. We will use the LSTM model to reshape our data as per the required shape of the LSTM.\par
@@ -109,10 +102,9 @@ We can not use the id column at all. So we drop it first. Then we create one fun
 After seeing the results of (@ganguli2017machine) we decided to assert most of our efforts into developing RNN-LSTM or Long Short-Term Memory Neural Network. LSTMs are great for working with time series data as their weights are longer depending on time series lag. However, this can substantially slow down the processing speed by having to save these specific weights, which was the case with this model. It took well over 5 hours to reach convergence.
 
 # Results
+An essential aspect of these results is the consideration of speed AND accuracy. Benchmark Solutions wanted actionable information which could be fast and effective. LSTM NN which came close to the first NN in accuracy but took substantially longer to run, reaching convergence at just over 100 epochs taking 5 hours and 22 minutes. The result below shows us that our predicted price was very close to the real trade price. 
 
-LSTM NN which came close to the first NN in accuracy but took substantially longer to run, reaching convergence at just over 100 epochs taking 5 hours and 22 minutes.
-
-![Predicted trade price	vs Real trade price](result.png)
+![](result.png)
 
 # Discussion/ Future work
 

@@ -1,0 +1,7 @@
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\centering
+\includegraphics{result.png}
+\caption{Predicted trade price vs Real trade price}
+\end{figure*}
