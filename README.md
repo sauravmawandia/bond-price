@@ -1,7 +1,8 @@
 # bond-price
 [Source repo](https://github.com/Pirimid/bond-price-prediction)
 [Presentation](https://docs.google.com/presentation/d/1dY-H9sCrjDUCAt_IEq_cEXtWSVEHhqBQI-YBALwyluI/mobilepresent?slide=id.g122d37a8aeb_0_100)
-[Report] (https://docs.google.com/document/d/1JF5KO-k_W-jvGlfv8vvJQcKE1GuzZJWyuk5S7JD5jqQ/edit)
+
+[Report](https://docs.google.com/document/d/1JF5KO-k_W-jvGlfv8vvJQcKE1GuzZJWyuk5S7JD5jqQ/edit)
 
 [Helpful Paper](https://medium.com/@thomasbacas/predicting-accurate-bond-prices-with-neural-networks-ff46c051c25c)
 
