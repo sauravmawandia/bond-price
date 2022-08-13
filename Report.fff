@@ -2,6 +2,13 @@
 \ifnextchar[{\eatarg}{}
 
 \centering
-\includegraphics{result.png}
-\caption{Predicted trade price vs Real trade price}
+\includegraphics{graph3.png}
+\caption{Graph 3}
+\end{figure*}
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\centering
+\includegraphics{graph4.png}
+\caption{Graph 4}
 \end{figure*}
